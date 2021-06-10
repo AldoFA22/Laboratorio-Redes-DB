@@ -2,26 +2,28 @@
 	
 	require 'database.php';
 
-		$id_eError = null;
+		$id_elError = null;
 		$nsError = null;
-		$modError = null;
+		$ceError = null;
 		$id_cError = null;
 		$id_eError = null;
-		$id_tError = null;
 		$id_mError = null;
+		$id_uError = null;
+		$id_esError = null;
 
 		//$perError = null;
 
 	if ( !empty($_POST)) {
 		
 		// keep track post values		
-		$id_e = $_POST['id_e'];
+		$id_el = $_POST['id_el'];
 		$ns = $_POST['ns'];
 		$id_c = $_POST['id_c'];
-		$mod = $_POST['mod'];
+		$ce = $_POST['ce'];
 		$id_e = $_POST['id_e'];
-		$id_t = $_POST['id_t'];
 		$id_m = $_POST['id_m'];
+		$id_u = $_POST['id_u'];
+		$id_es = $_POST['id_es'];
 		
 		// validate input
 		$valid = true;
@@ -34,20 +36,24 @@
 			$id_cError = 'Por favor seleccione una caracteristica';
 			$valid = false;
 		}	
-		if (empty($mod)) {
-			$modError = 'Por favor escriba una caracteristica extra';
+		if (empty($ce)) {
+			$ceError = 'Por favor escriba una caracteristica extra';
 			$valid = false;
 		}
 		if (empty($id_e)) {
 			$id_eError = 'Por favor seleccione un tipo de elemento';
 			$valid = false;
 		}
-		if (empty($id_t)) {
-			$id_tError = 'Por favor seleccione una materia';
+		if (empty($id_m)) {
+			$id_mError = 'Por favor seleccione una materia';
 			$valid = false;
 		}
-		if (empty($id_m)) {
-			$id_mError = 'Por favor seleccione una ubicación';
+		if (empty($id_u)) {
+			$id_uError = 'Por favor seleccione una ubicación';
+			$valid = false;
+		}
+		if (empty($id_es)) {
+			$id_esError = 'Por favor seleccione un estatus';
 			$valid = false;
 		}
 		
@@ -56,10 +62,32 @@
 			var_dump($_POST);
 			$pdo = Database::connect();
 			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+			$insert['first'] = $pdo->prepare("INSERT INTO elemento SET numero_serie = :numero_serie , id_caracteristica = :id_caracteristica, caracteristica_extra = :caracteristica_extra, id_tipo = :id_tipo, id_materia = :id_materia, id_ubicacion = :id_ubicacion");
+			$insert['second'] = $pdo->prepare("INSERT INTO elemento_estatus SET id_elemento = :id_elemento, id_estatus = :id_estatus"); 
+
+			$pdo->beginTransaction();
+
+			$insert['first']->bindValue(':numero_serie', $ns);
+			$insert['first']->bindValue(':id_caracteristica', $id_c);
+			$insert['first']->bindValue(':caracteristica_extra', $ce);
+			$insert['first']->bindValue(':id_tipo', $id_e);
+			$insert['first']->bindValue(':id_materia', $id_m);
+			$insert['first']->bindValue(':id_ubicacion', $id_u);
+			$insert['first']->execute();
+
+			$insert['second']->bindValue(':id_elemento', $pdo->lastInsertId());
+			$insert['second']->bindValue(':id_estatus', $id_es);
+			$insert['second']->execute();
 			
-			$sql = "INSERT INTO elemento ( numero_serie, id_caracteristica, caracteristica_extra, id_tipo, id_materia, id_ubicacion) values(?,?,?,?,?,?)";			
+			/*$sql = "INSERT INTO elemento ( numero_serie, id_caracteristica, caracteristica_extra, id_tipo, id_materia, id_ubicacion) values(?,?,?,?,?,?)";		
 			$q = $pdo->prepare($sql);
-			$q->execute(filter_var_array(array($nc, $nl, $ns, $mod, $mac, $mac2, $cant, $id_c, $id_e, $id_t, $id_m), FILTER_SANITIZE_STRING));			
+			$q->execute(filter_var_array(array($ns, $id_c, $ce, $id_e, $id_m, $id_u), FILTER_SANITIZE_STRING));	
+
+			$sql. = "INSERT INTO elemento_estatus ( id_elemento, id_estatus) values(?,?)";			
+			$q = $pdo->prepare($sql);
+			$q->execute(filter_var_array(array(mysql_insert_id(), $id_es), FILTER_SANITIZE_STRING)); */
+			$pdo->commit();
 			Database::disconnect();
 			header("Location: index.php");
 		}
@@ -97,7 +125,7 @@
 				    	<label class="control-label">Caracteristica</label>
 				    	<div class="controls">
 	                       	<select name ="id_c">
-		                        <option value="">Nombre/clave caracteristica</option>
+		                        <option value="">Caracteristica</option>
 		                        <?php
 							   		$pdo = Database::connect();
 							   		$query = 'SELECT * FROM caracteristica';
@@ -115,12 +143,12 @@
 						</div>
 					</div>
 
-					<div class="control-group <?php echo !empty($modError)?'error':'';?>">
+					<div class="control-group <?php echo !empty($ceError)?'error':'';?>">
 						<label class="control-label">Caracteristica extra</label>
 					    <div class="controls">
-					      	<input name="mod" type="text"  placeholder="Caracteristica extra" value="<?php echo !empty($mod)?$mod:'';?>">
-					      	<?php if (($modError != null)) ?>
-					      		<span class="help-inline"><?php echo $modError;?></span>						      	
+					      	<input name="ce" type="text"  placeholder="Caracteristica extra" value="<?php echo !empty($ce)?$ce:'';?>">
+					      	<?php if (($ceError != null)) ?>
+					      		<span class="help-inline"><?php echo $ceError;?></span>						      	
 					    </div>
 					</div>
 
@@ -146,38 +174,38 @@
 						</div>
 					</div>
 
-					<div class="control-group <?php echo !empty($id_tError)?'error':'';?>">
+					<div class="control-group <?php echo !empty($id_mError)?'error':'';?>">
 				    	<label class="control-label">Materia en la que se utiliza</label>
 				    	<div class="controls">
-	                       	<select name ="id_t">
+	                       	<select name ="id_m">
 		                        <option value="">Selecciona una materia</option>
 		                        <?php
 							   		$pdo = Database::connect();
 							   		$query = 'SELECT * FROM materia';
 			 				   		foreach ($pdo->query($query) as $row) {
-		                        		if ($row['id_materia']==$id_t)
-		                        			echo "<option selected value='" . $row['id_tipo'] . "'>" . $row['clave_materia'] . "</option>";
+		                        		if ($row['id_materia']==$id_m)
+		                        			echo "<option selected value='" . $row['id_materia'] . "'>" . $row['clave_materia'] . "</option>";
 		                        		else
-		                        			echo "<option value='" . $row['id_tipo'] . "'>" . $row['clave_materia'] . "</option>";
+		                        			echo "<option value='" . $row['id_materia'] . "'>" . $row['clave_materia'] . "</option>";
 			   						}
 			   						Database::disconnect();
 			  					?>
                             </select>
 					      	<?php if (($id_eError) != null) ?>
-					      		<span class="help-inline"><?php echo $id_tError;?></span>
+					      		<span class="help-inline"><?php echo $id_mError;?></span>
 						</div>
 					</div>
 
-					<div class="control-group <?php echo !empty($id_mError)?'error':'';?>">
+					<div class="control-group <?php echo !empty($id_uError)?'error':'';?>">
 				    	<label class="control-label">Ubicación</label>
 				    	<div class="controls">
-	                       	<select name ="id_m">
+	                       	<select name ="id_u">
 		                        <option value="">Selecciona una ubicación</option>
 		                        <?php
 							   		$pdo = Database::connect();
 							   		$query = 'SELECT * FROM ubicacion';
 			 				   		foreach ($pdo->query($query) as $row) {
-		                        		if ($row['id_ubicacion']==$id_m)
+		                        		if ($row['id_ubicacion']==$id_u)
 		                        			echo "<option selected value='" . $row['id_ubicacion'] . "'>" . $row['nombre_ubicacion'] . "</option>";
 		                        		else
 		                        			echo "<option value='" . $row['id_ubicacion'] . "'>" . $row['nombre_ubicacion'] . "</option>";
@@ -185,8 +213,30 @@
 			   						Database::disconnect();
 			  					?>
                             </select>
-					      	<?php if (($id_mError) != null) ?>
-					      		<span class="help-inline"><?php echo $id_mError;?></span>
+					      	<?php if (($id_uError) != null) ?>
+					      		<span class="help-inline"><?php echo $id_uError;?></span>
+						</div>
+					</div>
+
+					<div class="control-group <?php echo !empty($id_esError)?'error':'';?>">
+				    	<label class="control-label">Estatus</label>
+				    	<div class="controls">
+	                       	<select name ="id_es">
+		                        <option value="">Selecciona un estatus</option>
+		                        <?php
+							   		$pdo = Database::connect();
+							   		$query = 'SELECT * FROM estatus';
+			 				   		foreach ($pdo->query($query) as $row) {
+		                        		if ($row['id_estatus']==$id_es)
+		                        			echo "<option selected value='" . $row['id_estatus'] . "'>" . $row['nombre_estatus'] . "</option>";
+		                        		else
+		                        			echo "<option value='" . $row['id_estatus'] . "'>" . $row['nombre_estatus'] . "</option>";
+			   						}
+			   						Database::disconnect();
+			  					?>
+                            </select>
+					      	<?php if (($id_esError) != null) ?>
+					      		<span class="help-inline"><?php echo $id_esError;?></span>
 						</div>
 					</div>
 
