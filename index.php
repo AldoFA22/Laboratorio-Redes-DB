@@ -1,9 +1,70 @@
+<?php
+// Below is optional, remove if you have already connected to your database.
+
+$mysqli = mysqli_connect('localhost', 'root', 'root', 'laboratorio');
+
+// For extra protection these are the columns of which the user can sort by (in your database table).
+$columns = array('id_elemento','nombre_caracteristica','nombre_largo_caracteristica','nombre_marca','nombre_ubicacion','nombre_estatus');
+
+// Only get the column if it exists in the above columns array, if it doesn't exist the database table will be sorted by the first item in the columns array.
+$column = isset($_GET['column']) && in_array($_GET['column'], $columns) ? $_GET['column'] : $columns[0];
+
+// Get the sort order for the column, ascending or descending, default is ascending.
+$sort_order = isset($_GET['order']) && strtolower($_GET['order']) == 'desc' ? 'DESC' : 'ASC';
+
+if ($result = $mysqli->query('SELECT * from elemento_resumen ORDER BY ' .  $column . ' ' . $sort_order)) {
+	// Some variables we need for the table.
+	$up_or_down = str_replace(array('ASC','DESC'), array('up','down'), $sort_order); 
+	$asc_or_desc = $sort_order == 'ASC' ? 'desc' : 'asc';
+	$add_class = ' class="highlight"';
+	?>
 <!DOCTYPE html>
 <html lang="en">
 	<head>
+		<title>Inventario de Laboratorio de Redes</title>
 	    <meta 	charset="utf-8">
 	    <link   href="css/bootstrap.min.css" rel="stylesheet">
 	    <script src="js/bootstrap.min.js"></script>
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+			<style>
+			html {
+				font-family: Tahoma, Geneva, sans-serif;
+				padding: 10px;
+			}
+			table {
+				border-collapse: collapse;
+				width:900px;
+			}
+			th {
+				background-color: #f9fafb;
+				border: 1px solid #54585d;
+			}
+			th:hover {
+				background-color: #90cbff;
+			}
+			th a {
+				display: block;
+				text-decoration:none;
+				padding: 10px;
+				color: #000000;
+				font-size: 14px;
+			}
+			th a i {
+				margin-left: 0px;
+				color: rgba(0,0,0,1);
+			}
+			td {
+				padding: 10px;
+				color: #000000;
+				border: 1px solid #dddfe1;
+			}
+			tr {
+				background-color: #ffffff;
+			}
+			tr .highlight {
+				background-color: #FFFFFF;
+			}
+			</style>
 	</head>
 
 	<body>
@@ -18,53 +79,40 @@
 						<a href="modelos_marcas.php" class="btn btn-info">Consultar modelos y marcas vigentes</a>
 					</p>
 					
-					<table class="table table-striped table-bordered" class="table table-sm">
-			            <thead>
-			                <tr>		                 
-			                	<th>ID Elemento</th>
-			                	<th>Nombre Corto</th>
-	                        	<th>Nombre Largo</th>
-								<th>Marca</th>
-								<th>Ubicacion</th>
-								<th>Estatus</th>
-								<th>Acciones</th>
-			                </tr>
-			            </thead>
-			            <tbody>
-			              	<?php 
-						   	include 'database.php';
-						   	$pdo = Database::connect();
-						   	$sql = 'SELECT elemento.id_elemento ,nombre_caracteristica, nombre_largo_caracteristica, descripcion, nombre_marca, nombre_ubicacion, nombre_estatus FROM elemento_estatus 
-								INNER JOIN elemento ON elemento_estatus.id_elemento = elemento.id_elemento
-								INNER JOIN estatus ON estatus.id_estatus = elemento_estatus.id_estatus 
-								INNER JOIN ubicacion ON elemento.id_ubicacion = ubicacion.id_ubicacion 
-								INNER JOIN caracteristica ON elemento.id_caracteristica = caracteristica.id_caracteristica 
-								INNER JOIN modelo ON caracteristica.id_modelo_marca = modelo.id_modelo
-								INNER JOIN marca ON modelo.id_marca = marca.id_marca
-								ORDER BY elemento.id_elemento ASC;';
-		 				   	foreach ($pdo->query($sql) as $row) {
-								echo '<tr width=200>';
-								echo '<td>'. $row['id_elemento'] . '</td>';
-	    					  	echo '<td>'. $row['nombre_caracteristica'] . '</td>';							   	
-	    					   	echo '<td>'. $row['nombre_largo_caracteristica'] . '</td>';
-								echo '<td>'. $row['nombre_marca'] . '</td>';
-								echo '<td>'. $row['nombre_ubicacion'] . '</td>';
-								echo '<td>'. $row['nombre_estatus'] . '</td>';
-	                            echo'</td>';
-	                            echo '<td width=250>';
+					<table>
+				<tr>
+					<th><a href="index.php?column=id_elemento&order=<?php echo $asc_or_desc; ?>">ID<i class="fas fa-sort<?php echo $column == 'id_elemento' ? '-' . $up_or_down : ''; ?>"></i></a></th>
+					<th><a href="index.php?column=nombre_corto&order=<?php echo $asc_or_desc; ?>">Nombre Corto<i class="fas fa-sort<?php echo $column == 'nombre_corto' ? '-' . $up_or_down : ''; ?>"></i></a></th>
+					<th><a href="index.php?column=nombre_largo&order=<?php echo $asc_or_desc; ?>">Nombre Largo<i class="fas fa-sort<?php echo $column == 'nombre_largo' ? '-' . $up_or_down : ''; ?>"></i></a></th>
+					<th><a href="index.php?column=nombre_marca&order=<?php echo $asc_or_desc; ?>">Marca<i class="fas fa-sort<?php echo $column == 'nombre_marca' ? '-' . $up_or_down : ''; ?>"></i></a></th>
+					<th><a href="index.php?column=nombre_ubicacion&order=<?php echo $asc_or_desc; ?>">Ubicacion<i class="fas fa-sort<?php echo $column == 'nombre_ubicacion' ? '-' . $up_or_down : ''; ?>"></i></a></th>
+					<th><a href="index.php?column=nombre_estatus&order=<?php echo $asc_or_desc; ?>">Estatus<i class="fas fa-sort<?php echo $column == 'nombre_estatus' ? '-' . $up_or_down : ''; ?>"></i></a></th>
+					<th><a>Acciones</a></th>
+
+				</tr>
+				<?php while ($row = $result->fetch_assoc()): ?>
+				<tr>
+					<td<?php echo $column == 'id_elemento' ? $add_class : ''; ?>><?php echo $row['id_elemento']; ?></td>
+					<td<?php echo $column == 'nombre_corto' ? $add_class : ''; ?>><?php echo $row['nombre_caracteristica']; ?></td>
+					<td<?php echo $column == 'nombre_largo' ? $add_class : ''; ?>><?php echo $row['nombre_largo_caracteristica']; ?></td>
+					<td<?php echo $column == 'nombre_marca' ? $add_class : ''; ?>><?php echo $row['nombre_marca']; ?></td>
+					<td<?php echo $column == 'nombre_ubicacion' ? $add_class : ''; ?>><?php echo $row['nombre_ubicacion']; ?></td>
+					<td<?php echo $column == 'nombre_estatus' ? $add_class : ''; ?>><?php echo $row['nombre_estatus']; ?></td>
+					<td width=250><?php
 	    					   	echo '<a class="btn" href="read.php?id='.$row['id_elemento'].'">Detalles</a>';
 	    					   	echo '&nbsp;';
 	    					  	echo '<a class="btn btn-success" href="update.php?id='.$row['id_elemento'].'">Actualizar</a>';
 	    					   	echo '&nbsp;';
 	    					   	echo '<a class="btn btn-danger" href="delete.php?id='.$row['id_elemento'].'">Eliminar</a>';
-	    					   	echo '</td>';
-							  	echo '</tr>';
-						    }
-						   	Database::disconnect();
-						  	?>
-					    </tbody>
-		            </table>
+	    					   	echo '</td>'; ?></td>
+				</tr>
+				<?php endwhile; ?>
+			</table>
 	    	</div>
 	    </div> <!-- /container -->
 	</body>
 </html>
+<?php
+	$result->free();
+}
+?>
