@@ -44,9 +44,9 @@
 								echo '<td>'. $row['nombre_modelo'] . '/' . $row['nombre_marca'] .'</td>';
 	                            echo'</td>';
 	                            echo '<td width=200>';
-	    					  	echo '<a class="btn btn-success" href="update.php?id='.$row['id_elemento'].'">Actualizar</a>';
+	    					  	echo '<a class="btn btn-success" href="update_caracteristica.php?id='.$row['id_caracteristica'].'">Actualizar</a>';
 	    					   	echo '&nbsp;';
-	    					   	echo '<a class="btn btn-danger" href="delete.php?id='.$row['id_herramienta'].'">Eliminar</a>';
+	    					   	echo '<a class="btn btn-danger" href="delete_caracteristica.php?id='.$row['id_caracteristica'].'">Eliminar</a>';
 	    					   	echo '</td>';
 							  	echo '</tr>';
 						    }
