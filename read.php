@@ -9,7 +9,17 @@
 	} else {
 		$pdo = Database::connect();
 		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		$sql = "SELECT herramienta.*,estatus.nombre_estatus, tipo.nombre_tipo, marca.nombre_marca, caracteristica.* FROM herramienta, estatus, tipo, marca, caracteristica where id_herramienta = ? and herramienta.id_marca = marca.id_marca and herramienta.id_tipo = tipo.id_tipo and herramienta.id_estatus = estatus.id_estatus and herramienta.id_caracteristica = caracteristica.id_caracteristica";
+		$sql = "SELECT elemento.*, estatus.nombre_estatus, tipo.nombre_tipo, marca.nombre_marca, modelo.nombre_modelo, caracteristica.*, estatus.nombre_estatus, ubicacion.nombre_ubicacion, materia.clave_materia 
+		FROM elemento_estatus, elemento, caracteristica, estatus, tipo, modelo, marca, ubicacion, materia 
+		WHERE elemento.id_elemento = ? 
+		AND caracteristica.id_modelo_marca = modelo.id_modelo 
+		AND elemento.id_materia = materia.id_materia 
+		AND elemento.id_ubicacion = ubicacion.id_ubicacion 
+		AND modelo.id_marca = marca.id_marca 
+		AND elemento.id_tipo = tipo.id_tipo 
+		AND elemento_estatus.id_estatus = estatus.id_estatus
+		AND elemento_estatus.id_elemento = elemento.id_elemento 
+		AND elemento.id_caracteristica = caracteristica.id_caracteristica;";
 		$q = $pdo->prepare($sql);
 		$q->execute(array($id));
 		$data = $q->fetch(PDO::FETCH_ASSOC);
@@ -39,7 +49,7 @@
 						<label class="control-label">ID Herramienta</label>
 					    <div class="controls">
 							<label class="checkbox">
-								<?php echo $data['id_herramienta'];?>
+								<?php echo $data['id_elemento'];?>
 							</label>
 					    </div>
 					</div>
@@ -48,7 +58,7 @@
 					    <label class="control-label">Nombre corto:</label>
 					    <div class="controls">
 					      	<label class="checkbox">
-						     	<?php echo $data['nombre_corto'];?>
+						     	<?php echo $data['nombre_caracteristica'];?>
 						    </label>
 					    </div>
 					</div>
@@ -57,7 +67,7 @@
 					    <label class="control-label">Nombre largo:</label>
 					    <div class="controls">
 					      	<label class="checkbox">
-						     	<?php echo $data['nombre_largo'];?>
+						     	<?php echo $data['nombre_largo_caracteristica'];?>
 						    </label>
 					    </div>
 					</div>
@@ -75,7 +85,7 @@
 						<label class="control-label">Modelo</label>
 					    <div class="controls">
 							<label class="checkbox">
-								<?php echo $data['modelo'];?>
+								<?php echo $data['nombre_modelo'];?>
 							</label>
 					    </div>
 					</div>
@@ -108,28 +118,28 @@
 					</div>
 
 					<div class="control-group">
-						<label class="control-label">Cantidad:</label>
+						<label class="control-label">Descripción:</label>
 					    <div class="controls">
 							<label class="checkbox">
-								<?php echo $data['cantidad'];?>
+								<?php echo $data['descripcion'];?>
 							</label>
 					    </div>
 					</div>
 
 					<div class="control-group">
-						<label class="control-label">Direccion mac:</label>
+						<label class="control-label">Ubicación:</label>
 					    <div class="controls">
 							<label class="checkbox">
-								<?php echo $data['mac'];?>
+								<?php echo $data['nombre_ubicacion'];?>
 							</label>
 					    </div>
 					</div>
 
 					<div class="control-group">
-						<label class="control-label">Dirección mac 2:</label>
+						<label class="control-label">Materia en la que se utiliza:</label>
 					    <div class="controls">
 							<label class="checkbox">
-								<?php echo $data['mac_opcional'];?>
+								<?php echo $data['clave_materia'];?>
 							</label>
 					    </div>
 					</div>

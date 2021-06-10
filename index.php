@@ -13,24 +13,20 @@
 	    		</div>
 				<div class="table-responsive container-fluid">
 					<p>
-						<a href="create.php" class="btn btn-info">Agregar una Herramienta</a>
+						<a href="create.php" class="btn btn-info">Agregar nuevo elemento</a>
 						<a href="caracteristicas/caracteristicas.php" class="btn btn-info">Listas de caracteristicas</a>
-						<a href="marcas.php" class="btn btn-info">Consultar marcas vigentes</a>
+						<a href="modelos_marcas.php" class="btn btn-info">Consultar modelos y marcas vigentes</a>
 					</p>
 					
 					<table class="table table-striped table-bordered" class="table table-sm">
 			            <thead>
 			                <tr>		                 
-			                	<th>ID Herramienta</th>
+			                	<th>ID Elemento</th>
 			                	<th>Nombre Corto</th>
-	                        	<th>Nombre Largo</th>     
-								<th>Número de serie</th>
-								<th>Modelo</th>
-								<th>Estatus</th>
-								<th>Tipo</th>
+	                        	<th>Nombre Largo</th>
 								<th>Marca</th>
-								<th>Cantidad</th>
-								<th>Id C</th>
+								<th>Ubicacion</th>
+								<th>Estatus</th>
 								<th>Acciones</th>
 			                </tr>
 			            </thead>
@@ -38,24 +34,27 @@
 			              	<?php 
 						   	include 'database.php';
 						   	$pdo = Database::connect();
-						   	$sql = 'SELECT * FROM herramienta NATURAL JOIN caracteristica NATURAL JOIN estatus NATURAL JOIN tipo NATURAL JOIN marca';
+						   	$sql = 'SELECT elemento.id_elemento ,nombre_caracteristica, nombre_largo_caracteristica, descripcion, nombre_marca, nombre_ubicacion, nombre_estatus FROM elemento_estatus 
+								INNER JOIN elemento ON elemento_estatus.id_elemento = elemento.id_elemento
+								INNER JOIN estatus ON estatus.id_estatus = elemento_estatus.id_estatus 
+								INNER JOIN ubicacion ON elemento.id_ubicacion = ubicacion.id_ubicacion 
+								INNER JOIN caracteristica ON elemento.id_caracteristica = caracteristica.id_caracteristica 
+								INNER JOIN modelo ON caracteristica.id_modelo_marca = modelo.id_modelo
+								INNER JOIN marca ON modelo.id_marca = marca.id_marca
+								ORDER BY elemento.id_elemento ASC;';
 		 				   	foreach ($pdo->query($sql) as $row) {
 								echo '<tr width=200>';
-								echo '<td>'. $row['id_herramienta'] . '</td>';
-	    					  	echo '<td>'. $row['nombre_corto'] . '</td>';							   	
-	    					   	echo '<td>'. $row['nombre_largo'] . '</td>';
-								echo '<td>'. $row['numero_serie'] . '</td>';
-								echo '<td>'. $row['modelo'] . '</td>';
-								echo '<td>'. $row['nombre_estatus'] . '</td>';
-								echo '<td>'. $row['nombre_tipo'] . '</td>';
+								echo '<td>'. $row['id_elemento'] . '</td>';
+	    					  	echo '<td>'. $row['nombre_caracteristica'] . '</td>';							   	
+	    					   	echo '<td>'. $row['nombre_largo_caracteristica'] . '</td>';
 								echo '<td>'. $row['nombre_marca'] . '</td>';
-								echo '<td>'. $row['cantidad'] . '</td>';
-								echo '<td>'. $row['id_caracteristica'] . '</td>';
+								echo '<td>'. $row['nombre_ubicacion'] . '</td>';
+								echo '<td>'. $row['nombre_estatus'] . '</td>';
 	                            echo'</td>';
 	                            echo '<td width=250>';
-	    					   	echo '<a class="btn" href="read.php?id='.$row['id_herramienta'].'">Detalles</a>';
+	    					   	echo '<a class="btn" href="read.php?id='.$row['id_elemento'].'">Detalles</a>';
 	    					   	echo '&nbsp;';
-	    					  	echo '<a class="btn btn-success" href="update.php?id='.$row['id_herramienta'].'">Actualizar</a>';
+	    					  	echo '<a class="btn btn-success" href="update.php?id='.$row['id_elemento'].'">Actualizar</a>';
 	    					   	echo '&nbsp;';
 	    					   	echo '<a class="btn btn-danger" href="delete.php?id='.$row['id_herramienta'].'">Eliminar</a>';
 	    					   	echo '</td>';
