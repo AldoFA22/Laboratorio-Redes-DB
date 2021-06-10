@@ -56,7 +56,7 @@
 	    					   	echo '&nbsp;';
 	    					  	echo '<a class="btn btn-success" href="update.php?id='.$row['id_elemento'].'">Actualizar</a>';
 	    					   	echo '&nbsp;';
-	    					   	echo '<a class="btn btn-danger" href="delete.php?id='.$row['id_herramienta'].'">Eliminar</a>';
+	    					   	echo '<a class="btn btn-danger" href="delete.php?id='.$row['id_elemento'].'">Eliminar</a>';
 	    					   	echo '</td>';
 							  	echo '</tr>';
 						    }

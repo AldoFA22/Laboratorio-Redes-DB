@@ -42,9 +42,9 @@
 	    					  	echo '<td>'. $row['nombre_marca'] . '</td>';
 	                            echo'</td>';
 	                            echo '<td width=250>';
-	    					  	echo '<a class="btn btn-success" href="/laboratorio/update_marcas.php?id='.$row['id_marca'].'">Actualizar</a>';
+	    					  	echo '<a class="btn btn-success" href="update_modelo.php?id='.$row['id_modelo'].'">Actualizar</a>';
 	    					   	echo '&nbsp;';
-	    					   	echo '<a class="btn btn-danger" href="/laboratorio/delete_marcas.php?id='.$row['id_marca'].'">Eliminar</a>';
+	    					   	echo '<a class="btn btn-danger" href="delete_modelo.php?id='.$row['id_modelo'].'">Eliminar</a>';
 	    					   	echo '</td>';
 							  	echo '</tr>';
 						    }
