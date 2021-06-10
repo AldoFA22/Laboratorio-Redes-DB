@@ -40,13 +40,13 @@
     	
     		<div class="span10 offset1">
     			<div class="row">
-		    		<h3>Detalles: <?php echo $data['nombre_corto'];?></h3>
+		    		<h3>Detalles del elemento: <?php echo $data['nombre_corto'];?></h3>
 		    	</div>
 		    
 	    		<div class="form-horizontal" >
 	    		
 					<div class="control-group">
-						<label class="control-label">ID Herramienta</label>
+						<label class="control-label">ID Elemento</label>
 					    <div class="controls">
 							<label class="checkbox">
 								<?php echo $data['id_elemento'];?>
@@ -73,6 +73,15 @@
 					</div>
 
 					<div class="control-group">
+						<label class="control-label">Tipo:</label>
+					    <div class="controls">
+							<label class="checkbox">
+								<?php echo $data['nombre_tipo'];?>
+							</label>
+					    </div>
+					</div>
+
+					<div class="control-group">
 						<label class="control-label">Numero de serie:</label>
 					    <div class="controls">
 							<label class="checkbox">
@@ -86,24 +95,6 @@
 					    <div class="controls">
 							<label class="checkbox">
 								<?php echo $data['nombre_modelo'];?>
-							</label>
-					    </div>
-					</div>
-
-					<div class="control-group">
-						<label class="control-label">Estatus:</label>
-					    <div class="controls">
-							<label class="checkbox">
-								<?php echo $data['nombre_estatus'];?>
-							</label>
-					    </div>
-					</div>
-
-					<div class="control-group">
-						<label class="control-label">Tipo:</label>
-					    <div class="controls">
-							<label class="checkbox">
-								<?php echo $data['nombre_tipo'];?>
 							</label>
 					    </div>
 					</div>
@@ -127,6 +118,15 @@
 					</div>
 
 					<div class="control-group">
+						<label class="control-label">Descripción extra:</label>
+					    <div class="controls">
+							<label class="checkbox">
+								<?php echo $data['caracteristica_extra'];?>
+							</label>
+					    </div>
+					</div>
+
+					<div class="control-group">
 						<label class="control-label">Ubicación:</label>
 					    <div class="controls">
 							<label class="checkbox">
@@ -145,22 +145,14 @@
 					</div>
 
 					<div class="control-group">
-						<label class="control-label">ID: caracteristica:</label>
+						<label class="control-label">Estatus:</label>
 					    <div class="controls">
 							<label class="checkbox">
-								<?php echo $data['id_switch'];?>
-								<?php echo $data['id_kit'];?>
-								<?php echo $data['id_pinza'];?>
-								<?php echo $data['id_router'];?>
-								<?php echo $data['id_apoint'];?>
-								<?php echo $data['id_telefono'];?>
-								<?php echo $data['id_cable'];?>
-								<?php echo $data['id_servidor'];?>
-								<?php echo $data['id_modem'];?>
-								<?php echo $data['id_camara'];?>
+								<?php echo $data['nombre_estatus'];?>
 							</label>
 					    </div>
 					</div>
+
 				    <div class="form-actions">
 						<a class="btn" href="index.php">Regresar</a>
 					</div>					

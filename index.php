@@ -13,8 +13,8 @@
 	    		</div>
 				<div class="table-responsive container-fluid">
 					<p>
-						<a href="create.php" class="btn btn-info">Agregar nuevo elemento</a>
-						<a href="caracteristicas/caracteristicas.php" class="btn btn-info">Listas de caracteristicas</a>
+						<a href="create.php" class="btn btn-warning">Agregar nuevo elemento</a>
+						<a href="caracteristicas/caracteristicas.php" class="btn btn-info">Lista de caracteristicas</a>
 						<a href="modelos_marcas.php" class="btn btn-info">Consultar modelos y marcas vigentes</a>
 					</p>
 					

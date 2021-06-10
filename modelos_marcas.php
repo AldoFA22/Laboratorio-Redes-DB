@@ -13,9 +13,9 @@
 	    		</div>
 				<div class="table-responsive container-fluid">
 					<p>
-                        <a href="index.php" class="btn btn-info">Regresar al inventario</a>
-                        <a href="create_modelo.php" class="btn btn-info">Agregar un modelo</a>
-                        <a href="create_marcas.php" class="btn btn-info">Agregar una marca</a>
+                        <a href="index.php" class="btn btn-light">Regresar al inventario</a>
+                        <a href="create_modelo.php" class="btn btn-warning">Agregar un modelo</a>
+                        <a href="create_marcas.php" class="btn btn-warning">Agregar una marca</a>
                         <a href="marcas.php" class="btn btn-info">Consultar marcas vigentes</a>
 					</p>
 					
