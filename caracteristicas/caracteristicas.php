@@ -13,58 +13,45 @@
 	    		</div>
 				<div class="table-responsive container-fluid">
 					<p>
-                        <a href="/laboratorio/index.php" class="btn btn-info">Regresar al inventario</a>
-                        <a href="/laboratorio/create_marcas.php" class="btn btn-info">Agregar una marca</a>
+                        <a href="/inventario/index.php" class="btn btn-info">Regresar al inventario</a>
+                        <a href="/inventario/create_caracteristica.php" class="btn btn-info">Agregar una característica</a>
 					</p>
 					
 					<table class="table table-striped table-bordered" class="table table-sm">
 			            <thead>
 			                <tr>		                 
-			                	<th>Ver listas</th>
-			                	<th>Agregar</th>
+			                	<th>ID Elemento</th>
+			                	<th>Nombre Corto</th>
+	                        	<th>Nombre Largo</th>
+								<th>Descripción</th>
+								<th>Modelo-Marca</th>
+								<th>Acciones</th>
 			                </tr>
 			            </thead>
 			            <tbody>
-							<tr>		                 
-			                	<th><a class="btn" href="switches.php">Listas de caracteristicas de switches</a></th>
-			                	<th><a class="btn" href="">Agregar caracteristicas de un switch</a></th>
-			                </tr>
-							<tr>		                 
-			                	<th><a class="btn" href="kits.php">Listas de caracteristicas de kits</a></th>
-			                	<th><a class="btn" href="">Agregar caracteristicas de un kit</a></th>
-			                </tr>
-							<tr>		                 
-			                	<th><a class="btn" href="pinzas.php">Listas de caracteristicas de pinzas</a></th>
-			                	<th><a class="btn" href="">Agregar caracteristicas de una pinzas</a></th>
-			                </tr>
-							<tr>		                 
-			                	<th><a class="btn" href="router.php">Listas de caracteristicas de un router</a></th>
-			                	<th><a class="btn" href="">Agregar caracteristicas de un router</a></th>
-			                </tr>
-							<tr>		                 
-			                	<th><a class="btn" href="access.php">Listas de caracteristicas de access points</a></th>
-			                	<th><a class="btn" href="">Agregar caracteristicas de un access point</a></th>
-			                </tr>
-							<tr>		                 
-			                	<th><a class="btn" href="telefonos.php">Listas de caracteristicas de telefonos</a></th>
-			                	<th><a class="btn" href="">Agregar caracteristicas de un telefono</a></th>
-			                </tr>
-							<tr>		                 
-			                	<th><a class="btn" href="cables.php">Listas de caracteristicas de cables</a></th>
-			                	<th><a class="btn" href="">Agregar caracteristicas de un cable</a></th>
-			                </tr>
-							<tr>		                 
-			                	<th><a class="btn" href="servidores.php">Listas de caracteristicas de servidores</a></th>
-			                	<th><a class="btn" href="">Agregar caracteristicas de un servidor</a></th>
-			                </tr>
-							<tr>		                 
-			                	<th><a class="btn" href="modems.php">Listas de caracteristicas de modems</a></th>
-			                	<th><a class="btn" href="">Agregar caracteristicas de un modem</a></th>
-			                </tr>
-							<tr>		                 
-			                	<th><a class="btn" href="camaras.php">Listas de caracteristicas de camaras</a></th>
-			                	<th><a class="btn" href="">Agregar caracteristicas de una camara</a></th>
-			                </tr>
+			              	<?php 
+						   	include 'database.php';
+						   	$pdo = Database::connect();
+						   	$sql = 'SELECT caracteristica.*, modelo.*, marca.* FROM caracteristica
+						   	INNER JOIN modelo ON caracteristica.id_modelo_marca = modelo.id_modelo 
+						   	INNER JOIN marca ON modelo.id_marca = marca.id_marca ORDER BY caracteristica.id_caracteristica;';
+		 				   	foreach ($pdo->query($sql) as $row) {
+								echo '<tr width=200>';
+								echo '<td>'. $row['id_caracteristica'] . '</td>';
+	    					  	echo '<td>'. $row['nombre_caracteristica'] . '</td>';							   	
+	    					   	echo '<td>'. $row['nombre_largo_caracteristica'] . '</td>';
+								echo '<td>'. $row['descripcion'] . '</td>';
+								echo '<td>'. $row['nombre_modelo'] . '/' . $row['nombre_marca'] .'</td>';
+	                            echo'</td>';
+	                            echo '<td width=200>';
+	    					  	echo '<a class="btn btn-success" href="update.php?id='.$row['id_elemento'].'">Actualizar</a>';
+	    					   	echo '&nbsp;';
+	    					   	echo '<a class="btn btn-danger" href="delete.php?id='.$row['id_herramienta'].'">Eliminar</a>';
+	    					   	echo '</td>';
+							  	echo '</tr>';
+						    }
+						   	Database::disconnect();
+						  	?>
 					    </tbody>
 		            </table>
 	    	</div>
