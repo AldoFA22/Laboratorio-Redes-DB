@@ -13,8 +13,8 @@
 	    		</div>
 				<div class="table-responsive container-fluid">
 					<p>
-                        <a href="/inventario/index.php" class="btn btn-info">Regresar al inventario</a>
-                        <a href="/inventario/create_caracteristica.php" class="btn btn-info">Agregar una característica</a>
+                        <a href="/inventario/index.php" class="btn btn-light">Regresar al inventario</a>
+                        <a href="/inventario/create_caracteristica.php" class="btn btn-warning">Agregar una característica</a>
 					</p>
 					
 					<table class="table table-striped table-bordered" class="table table-sm">

@@ -13,8 +13,8 @@
 	    		</div>
 				<div class="table-responsive container-fluid">
 					<p>
-                        <a href="modelos_marcas.php" class="btn btn-info">Regresar a modelos y marcas</a>
-                        <a href="create_marcas.php" class="btn btn-info">Agregar una marca</a>
+                        <a href="modelos_marcas.php" class="btn btn-light">Regresar a modelos y marcas</a>
+                        <a href="create_marcas.php" class="btn btn-warning">Agregar una marca</a>
 					</p>
 					
 					<table class="table table-striped table-bordered" class="table table-sm">
