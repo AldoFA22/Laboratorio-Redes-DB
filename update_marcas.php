@@ -38,13 +38,13 @@
 			// else 
             //     $sql = "UPDATE auto2  set idauto = ?, nombrec = ?, idmarca =?, ac= false WHERE idauto = ?";
                 
-            $sql = "UPDATE marca set id_marca = ?, nombre_marca = ? WHERE id_marca = ?";
+            $sql = "UPDATE marca set nombre_marca = ? WHERE id_marca = ?";
 
 			
 			$q = $pdo->prepare($sql);
 
             // $q->execute(array($f_id,$subm,$marc,$id));
-            $q->execute(filter_var_array(array($f_id,$marc,$id),FILTER_SANITIZE_STRING));
+            $q->execute(filter_var_array(array($marc,$id),FILTER_SANITIZE_STRING));
 			
 			Database::disconnect();			
 			header("Location: marcas.php");
@@ -58,7 +58,7 @@
 		$q->execute(array($id));
 		$data = $q->fetch(PDO::FETCH_ASSOC);
 		$f_id = $data['id_marca'];
-		$marc = $data['marc'];
+		$marc = $data['nombre_marca'];
 		Database::disconnect();
 	}
 ?>
@@ -79,7 +79,7 @@
 		    		<h3>Actualizar marca</h3>
 		    	</div>
     		
-	    			<form class="form-horizontal" action="/laboratorio/update_marcas.php?id=<?php echo $id?>" method="post">
+	    			<form class="form-horizontal" action="update_marcas.php?id=<?php echo $id?>" method="post">
 					  
 					  <div class="control-group <?php echo !empty($f_idError)?'error':'';?>">
 
@@ -105,7 +105,7 @@
 
 					  <div class="form-actions">
 						  <button type="submit" class="btn btn-success">Actualizar</button>
-						  <a class="btn" href="/laboratorio/marcas.php">Regresar</a>
+						  <a class="btn" href="marcas.php">Regresar</a>
 						</div>
 					</form>
 				</div>

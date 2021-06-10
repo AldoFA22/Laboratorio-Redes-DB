@@ -103,7 +103,6 @@
 		$q = $pdo->prepare($sql);
 		$q->execute(array($id));
 		$data = $q->fetch(PDO::FETCH_ASSOC);
-		echo '<pre>'; print_r($data); echo '</pre>';
 
 		$f_id = $data['id_elemento'];
 		$ns = $data['numero_serie'];
@@ -284,9 +283,9 @@
 	 				   						foreach ($pdo->query($query) as $row) {
 												
 	 				   							if ($row['id_estatus']==$id_est)
-                        	   						echo "<option selected value='" . $row['id_estatus'] . "'>" . $row['id_estatus'] . ' -> ' . $row['nombre_estatus'] . "</option>";
+                        	   						echo "<option selected value='" . $row['id_estatus'] . "'>" . $row['nombre_estatus'] . "</option>";
                         	   					else
-                        	   						echo "<option value='" . $row['id_estatus'] . "'>" . $row['id_estatus'] . ' -> ' . $row['nombre_estatus']. "</option>";
+                        	   						echo "<option value='" . $row['id_estatus'] . "'>" . $row['nombre_estatus']. "</option>";
 					   						}
 					   						Database::disconnect();
 					  					?>

@@ -34,12 +34,12 @@
 			    	<h3>Dar de baja una marca</h3>
 			    </div>
 			    
-			    <form class="form-horizontal" action="/laboratorio/delete_marcas.php" method="post">
+			    <form class="form-horizontal" action="delete_marcas.php" method="post">
 		    		<input type="hidden" name="id" value="<?php echo $id;?>"/>
 					<p class="alert alert-error">Estas seguro que quieres eliminar esta marca ?</p>
 					<div class="form-actions">
 						<button type="submit" class="btn btn-danger">Si</button>
-						<a class="btn" href="/laboratorio/marcas.php">No</a>
+						<a class="btn" href="marcas.php">No</a>
 					</div>
 				</form>
 			</div>					
