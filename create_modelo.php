@@ -2,7 +2,7 @@
 require 'database.php';
 
 $f_idError = null;
-$nombreModelorror = null;
+$nombreModeloError = null;
 //$perError = null;
 
 if (!empty($_POST)) {
