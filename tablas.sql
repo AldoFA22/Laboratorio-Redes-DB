@@ -618,7 +618,7 @@ AND elemento.id_ubicacion = ubicacion.id_ubicacion
 AND modelo.id_marca = marca.id_marca 
 AND elemento.id_tipo = tipo.id_tipo 
 AND elemento_estatus.id_estatus = estatus.id_estatus 
-AND elemento_estatus.id_elemento = elemento.id_el 
+AND elemento_estatus.id_elemento = elemento.id_elemento 
 AND elemento.id_caracteristica = caracteristica.id_caracteristica;
 END$$
 DELIMITER ;
