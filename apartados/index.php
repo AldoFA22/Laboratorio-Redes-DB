@@ -16,8 +16,6 @@
 					<p>
 						<a href="create_apartado.php" class="btn btn-warning">Agregar nuevo apartado</a>
 						<a href="../usuarios/index.php" class="btn btn-info">Lista de Usuarios</a>
-						<a href="modelos_marcas.php" class="btn btn-info">Consultar modelos y marcas vigentes</a>
-						<a href="apartados/index.php" class="btn btn-info">Crear apartado</a>
 					</p>
 					
 					<table class="table table-striped table-bordered" class="table table-sm">
@@ -39,7 +37,7 @@
 
 							//Postgres
 						   	$pdo = new Database_pg;
-						   	$sql = 'SELECT * FROM apartados NATURAL JOIN usuarios ORDER BY apartados.id_apartado DESC;';
+						   	$sql = 'SELECT * FROM apartados INNER JOIN usuarios ON apartados.matricula_usuario = usuarios.id_usuario ORDER BY id_apartado DESC;';
                             $query = $pdo->prepare($sql);
         			        $query->execute();
         			        $apartados = $query->fetchAll(PDO::FETCH_OBJ);
@@ -68,10 +66,16 @@
 									echo '<a class="btn" href="entregar_apartado.php?id='.$row->id_apartado.'">Entregar Apartado</a>';
 	    					   		echo '&nbsp;';
 								}
+								if(!$row->entregado){
+									echo '<a class="btn btn-success" href="update_apartado.php?id='.$row->id_apartado.'">Actualizar</a>';
+	    					   		echo '&nbsp;';
+								}
+	    					  	
+								if($row->entregado){
+									echo '<a class="btn btn-danger" href="delete_apartado.php?id='.$row->id_apartado.'">Eliminar</a>';
+	    					   		echo '&nbsp;';
+								}
 	    					   	
-	    					  	echo '<a class="btn btn-success" href="update.php?id='.$row->id_apartado.'">Actualizar</a>';
-	    					   	echo '&nbsp;';
-	    					   	echo '<a class="btn btn-danger" href="delete.php?id='.$row->id_apartado.'">Eliminar</a>';
 	    					   	echo '</td>';
 							  	echo '</tr>';
 						    }

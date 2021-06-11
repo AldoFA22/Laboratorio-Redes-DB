@@ -1,5 +1,4 @@
 <?php 
-	require '../database.php';
     require '../database_pg.php';
 	$id = 0;	
 	if ( !empty($_GET['id'])) {
@@ -13,7 +12,7 @@
 
 		// Postgresql
 		$pdo = new Database_pg;
-		$sql = 'UPDATE apartados SET entregado = true WHERE id_apartado = :ent';
+		$sql = 'DELETE FROM apartados WHERE id_apartado = :ent';
         try{
 			$query = $pdo->prepare($sql);
 			$query->bindParam(':ent', $id, PDO::PARAM_INT);
@@ -24,14 +23,7 @@
 			echo  $e->getMessage();
 		}
 
-        //Mysql Modificar la herramienta a no disponible
-
-		$pdo_mysql = Database::connect();
-        $pdo_mysql->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $sql ="UPDATE elemento_estatus SET id_estatus= 1 WHERE id_elemento = ?";
-        $q = $pdo_mysql->prepare($sql);
-        $q->execute(filter_var_array(array($id), FILTER_SANITIZE_STRING));
-        Database::disconnect();
+        
 		header("Location: index.php");		
 	} 	
 ?>
@@ -48,12 +40,12 @@
 	    <div class="container">	    
 	    	<div class="span10 offset1">
 	    		<div class="row">
-			    	<h3>Entrega de material</h3>
+			    	<h3>Eliminar un registro del sistema de apartados</h3>
 			    </div>
 			    
-			    <form class="form-horizontal" action="entregar_apartado.php" method="post">
-		    		<input type="hidden" name="id" value="<?php echo $id;?>"/>
-					<p class="alert alert-warning">Esta seguro de marcar como entregado esta herramienta/material? Favor de verificar su condicion antes de marcarlo como recibido.</p>
+			    <form class="form-horizontal" action="delete_apartado.php" method="post">
+		    		<input name="id" type="hidden" value="<?php echo $id;?>"/>
+					<p class="alert alert-error">Esta seguro que usted desea eliminar este apartado? Este registro no se podrá recuperar una vez borrado...</p>
 					<div class="form-actions">
 						<button type="submit" class="btn btn-danger">Si</button>
 						<a class="btn" href="index.php">No</a>

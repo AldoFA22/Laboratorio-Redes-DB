@@ -10,7 +10,7 @@ $fecha_creacionError = null;
 $fecha_entregaError = null;
 
 if (!empty($_POST)) {
-	print_r($_POST);
+	//print_r($_POST);
     // keep track post values		
     $id_alumno = $_POST['id_alumno'];
     $id_modelo = $_POST['id_modelo'];
@@ -37,7 +37,7 @@ if (!empty($_POST)) {
 
     // insert data
     if ($valid) {
-        print_r($_POST);
+        //print_r($_POST);
 		
 		//Postgresql
 		$pdo = new Database_pg;
@@ -49,12 +49,8 @@ if (!empty($_POST)) {
 			$query->bindParam(':fecha', $fecha_entrega, PDO::PARAM_STR);
 			$query->execute();
 			$pdo->close();
-		}
-		catch(PDOException $e) {
-			echo  $e->getMessage();
-		}
 
-		//Mysql Modificar la herramienta a no disponible
+			//Mysql Modificar la herramienta a no disponible
 
 		$pdo_mysql = Database::connect();
         $pdo_mysql->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -63,7 +59,13 @@ if (!empty($_POST)) {
         $q->execute(filter_var_array(array($id_modelo), FILTER_SANITIZE_STRING));
         Database::disconnect();
 		
-        //header("Location: index.php");
+        header("Location: index.php");
+		}
+		catch(PDOException $e) {
+			echo  $e->getMessage();
+		}
+
+		
     }
 }
 ?>
@@ -82,7 +84,7 @@ if (!empty($_POST)) {
     <div class="container">
         <div class="span10 offset1">
             <div class="row">
-                <h3>Agregar un nuevo modelo</h3>
+                <h3>Agregar un nuevo apartado</h3>
             </div>
 
             <form class="form-horizontal" action="create_apartado.php" method="post">
