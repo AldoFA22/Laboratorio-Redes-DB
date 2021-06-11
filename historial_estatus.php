@@ -30,7 +30,7 @@
 			              	<?php 
 						   	include 'database.php';
 						   	$pdo = Database::connect();
-						   	$sql = 'SELECT * FROM historial_estatus;';
+						   	$sql = 'SELECT * FROM historial_estatus ORDER BY hora_cambio DESC;';
 		 				   	foreach ($pdo->query($sql) as $row) {
 								echo '<tr width=200>';
 								echo '<td>'. $row['id_historial'] . '</td>';

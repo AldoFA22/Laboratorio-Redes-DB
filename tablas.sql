@@ -104,7 +104,7 @@ VALUES (1,1,'N/A'),
 
 CREATE TABLE IF NOT EXISTS caracteristica (
    id_caracteristica int NOT NULL AUTO_INCREMENT,
-   nombre_caracteristica varchar(35) DEFAULT NULL,
+   nombre_caracteristica varchar(40) DEFAULT NULL,
    nombre_largo_caracteristica varchar(50) DEFAULT NULL,
    id_modelo_marca int,
    descripcion text,
@@ -112,7 +112,6 @@ CREATE TABLE IF NOT EXISTS caracteristica (
   FOREIGN KEY ( id_modelo_marca ) REFERENCES modelo( id_modelo ) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
-ALTER TABLE caracteristica MODIFY nombre_caracteristica varchar(40);
 
 INSERT INTO caracteristica
 VALUES (1,'Servidor DELL','Servidor DELL Power Edge T110 II',36,'Intel Xeon E3-1220 @3.10 GHz RAM: 8GB DDR3 @1600 MHz Disco Duro: 500 GB ST500NM0011'),
@@ -598,3 +597,95 @@ VALUES (1,1,2),
        (156,156,4),
        (157,157,4),
        (158,158,4);
+
+CREATE VIEW elemento_resumen AS SELECT elemento.id_elemento ,nombre_caracteristica, nombre_largo_caracteristica, descripcion, nombre_marca, nombre_ubicacion, nombre_estatus FROM elemento_estatus 
+  INNER JOIN elemento ON elemento_estatus.id_elemento = elemento.id_elemento
+  INNER JOIN estatus ON estatus.id_estatus = elemento_estatus.id_estatus 
+  INNER JOIN ubicacion ON elemento.id_ubicacion = ubicacion.id_ubicacion 
+  INNER JOIN caracteristica ON elemento.id_caracteristica = caracteristica.id_caracteristica 
+  INNER JOIN modelo ON caracteristica.id_modelo_marca = modelo.id_modelo
+  INNER JOIN marca ON modelo.id_marca = marca.id_marca;
+
+DELIMITER $$
+CREATE PROCEDURE GetElementoById(IN id_el INT)
+BEGIN
+SELECT elemento.*, estatus.nombre_estatus, tipo.nombre_tipo, marca.nombre_marca, modelo.nombre_modelo, caracteristica.*, estatus.nombre_estatus, ubicacion.nombre_ubicacion, materia.clave_materia 
+FROM elemento_estatus, elemento, caracteristica, estatus, tipo, modelo, marca, ubicacion, materia 
+WHERE elemento.id_elemento = id_el 
+AND caracteristica.id_modelo_marca = modelo.id_modelo 
+AND elemento.id_materia = materia.id_materia 
+AND elemento.id_ubicacion = ubicacion.id_ubicacion 
+AND modelo.id_marca = marca.id_marca 
+AND elemento.id_tipo = tipo.id_tipo 
+AND elemento_estatus.id_estatus = estatus.id_estatus 
+AND elemento_estatus.id_elemento = elemento.id_el 
+AND elemento.id_caracteristica = caracteristica.id_caracteristica;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE UpdateElementoById(
+IN numero_serie VARCHAR(20), 
+IN id_caracteristica INT, 
+IN caracteristica_extra VARCHAR(100), 
+IN id_tipo INT, 
+IN id_materia INT, 
+IN id_ubicacion INT,
+IN id_el INT)
+BEGIN
+UPDATE `elemento` SET numero_serie = numero_serie, id_caracteristica= id_caracteristica,caracteristica_extra= caracteristica_extra,id_tipo= id_tipo, id_materia=id_materia, id_ubicacion= id_ubicacion WHERE id_elemento = id_el; 
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE DeleteElementoById(IN id INT)
+BEGIN
+DELETE FROM elemento WHERE id_elemento = id;
+END$$
+DELIMITER ;
+
+DELIMITER $$ 
+DROP TRIGGER IF EXISTS before_elemento_estatus_update;
+CREATE TRIGGER before_elemento_estatus_update 
+BEFORE UPDATE 
+ON elemento_estatus FOR EACH ROW BEGIN 
+IF NEW.id_estatus <> OLD.id_estatus THEN 
+IF (OLD.id_estatus = 1 AND NEW.id_estatus = 2) THEN 
+INSERT INTO historial_estatus SET id_elemento = OLD.id_elemento, hora_cambio = NOW(), id_estatus_old = OLD.id_estatus, nombre_estatus_old = 'Disponible', id_estatus_new = NEW.id_estatus, nombre_estatus_new = 'Apartado'; 
+END IF; 
+IF (OLD.id_estatus = 1 AND NEW.id_estatus = 3) THEN 
+INSERT INTO historial_estatus SET id_elemento = OLD.id_elemento, hora_cambio = NOW(), id_estatus_old = OLD.id_estatus, nombre_estatus_old = 'Disponible', id_estatus_new = NEW.id_estatus, nombre_estatus_new = 'En reparación'; 
+END IF; 
+IF (OLD.id_estatus = 1 AND NEW.id_estatus = 4) THEN 
+INSERT INTO historial_estatus SET id_elemento = OLD.id_elemento, hora_cambio = NOW(), id_estatus_old = OLD.id_estatus, nombre_estatus_old = 'Disponible', id_estatus_new = NEW.id_estatus, nombre_estatus_new = 'Retirado'; 
+END IF; 
+IF (OLD.id_estatus = 2 AND NEW.id_estatus = 1) THEN 
+INSERT INTO historial_estatus SET id_elemento = OLD.id_elemento, hora_cambio = NOW(), id_estatus_old = OLD.id_estatus, nombre_estatus_old = 'Apartado', id_estatus_new = NEW.id_estatus, nombre_estatus_new = 'Disponible'; 
+END IF; 
+IF (OLD.id_estatus = 2 AND NEW.id_estatus = 3) THEN 
+INSERT INTO historial_estatus SET id_elemento = OLD.id_elemento, hora_cambio = NOW(), id_estatus_old = OLD.id_estatus, nombre_estatus_old = 'Apartado', id_estatus_new = NEW.id_estatus, nombre_estatus_new = 'En reparación'; 
+END IF; 
+IF (OLD.id_estatus = 2 AND NEW.id_estatus = 4) THEN 
+INSERT INTO historial_estatus SET id_elemento = OLD.id_elemento, hora_cambio = NOW(), id_estatus_old = OLD.id_estatus, nombre_estatus_old = 'Apartado', id_estatus_new = NEW.id_estatus, nombre_estatus_new = 'Retirado'; 
+END IF; 
+IF (OLD.id_estatus = 3 AND NEW.id_estatus = 1) THEN 
+INSERT INTO historial_estatus SET id_elemento = OLD.id_elemento, hora_cambio = NOW(), id_estatus_old = OLD.id_estatus, nombre_estatus_old = 'En reparación', id_estatus_new = NEW.id_estatus, nombre_estatus_new = 'Disponible'; 
+END IF; 
+IF (OLD.id_estatus = 3 AND NEW.id_estatus = 2) THEN 
+INSERT INTO historial_estatus SET id_elemento = OLD.id_elemento, hora_cambio = NOW(), id_estatus_old = OLD.id_estatus, nombre_estatus_old = 'En reparación', id_estatus_new = NEW.id_estatus, nombre_estatus_new = 'Apartado'; 
+END IF; 
+IF (OLD.id_estatus = 3 AND NEW.id_estatus = 4) THEN 
+INSERT INTO historial_estatus SET id_elemento = OLD.id_elemento, hora_cambio = NOW(), id_estatus_old = OLD.id_estatus, nombre_estatus_old = 'En reparación', id_estatus_new = NEW.id_estatus, nombre_estatus_new = 'Retirado'; 
+END IF; 
+IF (OLD.id_estatus = 4 AND NEW.id_estatus = 1) THEN 
+INSERT INTO historial_estatus SET id_elemento = OLD.id_elemento, hora_cambio = NOW(), id_estatus_old = OLD.id_estatus, nombre_estatus_old = 'Retirado', id_estatus_new = NEW.id_estatus, nombre_estatus_new = 'Disponible'; 
+END IF; 
+IF (OLD.id_estatus = 4 AND NEW.id_estatus = 2) THEN 
+INSERT INTO historial_estatus SET id_elemento = OLD.id_elemento, hora_cambio = NOW(), id_estatus_old = OLD.id_estatus, nombre_estatus_old = 'Retirado', id_estatus_new = NEW.id_estatus, nombre_estatus_new = 'Apartado'; 
+END IF; 
+IF (OLD.id_estatus = 4 AND NEW.id_estatus = 3) THEN 
+INSERT INTO historial_estatus SET id_elemento = OLD.id_elemento, hora_cambio = NOW(), id_estatus_old = OLD.id_estatus, nombre_estatus_old = 'Retirado', id_estatus_new = NEW.id_estatus, nombre_estatus_new = 'En reparación'; 
+END IF; 
+END IF;
+END$$
+DELIMITER ;
