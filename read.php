@@ -9,17 +9,7 @@
 	} else {
 		$pdo = Database::connect();
 		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		$sql = "SELECT elemento.*, estatus.nombre_estatus, tipo.nombre_tipo, marca.nombre_marca, modelo.nombre_modelo, caracteristica.*, estatus.nombre_estatus, ubicacion.nombre_ubicacion, materia.clave_materia 
-		FROM elemento_estatus, elemento, caracteristica, estatus, tipo, modelo, marca, ubicacion, materia 
-		WHERE elemento.id_elemento = ? 
-		AND caracteristica.id_modelo_marca = modelo.id_modelo 
-		AND elemento.id_materia = materia.id_materia 
-		AND elemento.id_ubicacion = ubicacion.id_ubicacion 
-		AND modelo.id_marca = marca.id_marca 
-		AND elemento.id_tipo = tipo.id_tipo 
-		AND elemento_estatus.id_estatus = estatus.id_estatus
-		AND elemento_estatus.id_elemento = elemento.id_elemento 
-		AND elemento.id_caracteristica = caracteristica.id_caracteristica;";
+		$sql = "CALL GetElementoById(?);";
 		$q = $pdo->prepare($sql);
 		$q->execute(array($id));
 		$data = $q->fetch(PDO::FETCH_ASSOC);

@@ -76,7 +76,7 @@
 			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 			//Update elemento
-			$sql = "UPDATE `elemento` SET numero_serie = ?,id_caracteristica= ?,caracteristica_extra= ?,id_tipo= ?, id_materia=?, id_ubicacion= ? WHERE id_elemento = ?";
+			$sql = "CALL UpdateElementoById(?,?,?,?,?,?,?);";
 			$q = $pdo->prepare($sql);
 			$q->execute(filter_var_array(array($ns,$id_c,$ce,$id_t,$id_mat,$id_ub,$id),FILTER_SANITIZE_STRING));
 			Database::disconnect();
