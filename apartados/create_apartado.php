@@ -94,7 +94,7 @@ if (!empty($_POST)) {
 		                        <option value="">Selecciona un instrumento</option>
 		                        <?php
 							   		$pdo = Database::connect();
-									$query = "SELECT * FROM elemento INNER JOIN caracteristica ON elemento.id_caracteristica = caracteristica.id_caracteristica INNER JOIN elemento_estatus ON elemento.id_elemento = elemento_estatus.id_elemento INNER JOIN estatus ON elemento_estatus.id_estatus = estatus.id_estatus WHERE estatus.id_estatus = 1";
+									$query = "SELECT * FROM elemento INNER JOIN caracteristica ON elemento.id_caracteristica = caracteristica.id_caracteristica INNER JOIN elemento_estatus ON elemento.id_elemento = elemento_estatus.id_elemento INNER JOIN estatus ON elemento_estatus.id_estatus = estatus.id_estatus WHERE estatus.id_estatus = 1 ORDER BY elemento.id_elemento ASC";
 							   		
 			 				   		foreach ($pdo->query($query) as $row) {
 		                        		if ($row['id_elemento']==$id_modelo)

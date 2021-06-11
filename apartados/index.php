@@ -64,8 +64,11 @@
 	                            echo'</td>';
 
 	                            echo '<td width=250>';
-	    					   	echo '<a class="btn" href="read.php?id='.$row->id_apartado.'">Detalles</a>';
-	    					   	echo '&nbsp;';
+								if(!$row->entregado){
+									echo '<a class="btn" href="entregar_apartado.php?id='.$row->id_apartado.'">Entregar Apartado</a>';
+	    					   		echo '&nbsp;';
+								}
+	    					   	
 	    					  	echo '<a class="btn btn-success" href="update.php?id='.$row->id_apartado.'">Actualizar</a>';
 	    					   	echo '&nbsp;';
 	    					   	echo '<a class="btn btn-danger" href="delete.php?id='.$row->id_apartado.'">Eliminar</a>';
