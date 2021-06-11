@@ -5,15 +5,15 @@ class Database_pg extends PDO{
 	//dbname
 	private $dbname = "dba6";
 	//host
-	private $host 	= "10.144.1.208";
-	//private $host 	= "proxy16.rt3.io";
+	// private $host 	= "10.144.1.208";
+	private $host 	= "proxy19.rt3.io";
 	//user database
 	private $user 	= "dba6";
 	//password user qwerty
 	private $pass 	= 'qwerty';
 	//port
-	private $port 	= 5432;
-	//private $port 	= 30448;
+	// private $port 	= 5432;
+	private $port 	= 33964;
     //instance
 	private $dbh;
  

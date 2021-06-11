@@ -13,9 +13,9 @@
 	    		</div>
 				<div class="table-responsive container-fluid">
 					<p>
-						<a href="create_apartado.php" class="btn btn-warning">Agregar nuevo apartado</a>
-						<a href="../usuarios/index.php" class="btn btn-info">Lista de Usuarios</a>
-						<a href="modelos_marcas.php" class="btn btn-info">Consultar modelos y marcas vigentes</a>
+						<a href="create_usuario.php" class="btn btn-warning">Agregar nuevo usuario</a>
+						<!-- <a href="../usuarios/index.php" class="btn btn-info">Lista de Usuarios</a> -->
+						<a href="usuarios.php" class="btn btn-info">Consultar usuarios</a>
 						<a href="apartados/index.php" class="btn btn-info">Crear apartado</a>
 					</p>
 					
