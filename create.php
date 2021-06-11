@@ -64,21 +64,22 @@
 			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 			$insert['first'] = $pdo->prepare("INSERT INTO elemento SET numero_serie = :numero_serie , id_caracteristica = :id_caracteristica, caracteristica_extra = :caracteristica_extra, id_tipo = :id_tipo, id_materia = :id_materia, id_ubicacion = :id_ubicacion");
-			$insert['second'] = $pdo->prepare("INSERT INTO elemento_estatus SET id_elemento = :id_elemento, id_estatus = :id_estatus"); 
+			$insert['second'] = $pdo->prepare("INSERT INTO elemento_estatus SET id_elemento = :id_elemento, id_estatus = :id_estatus");
+			try { 
 
-			$pdo->beginTransaction();
+				$pdo->beginTransaction();
 
-			$insert['first']->bindValue(':numero_serie', $ns);
-			$insert['first']->bindValue(':id_caracteristica', $id_c);
-			$insert['first']->bindValue(':caracteristica_extra', $ce);
-			$insert['first']->bindValue(':id_tipo', $id_e);
-			$insert['first']->bindValue(':id_materia', $id_m);
-			$insert['first']->bindValue(':id_ubicacion', $id_u);
-			$insert['first']->execute();
+				$insert['first']->bindValue(':numero_serie', $ns);
+				$insert['first']->bindValue(':id_caracteristica', $id_c);
+				$insert['first']->bindValue(':caracteristica_extra', $ce);
+				$insert['first']->bindValue(':id_tipo', $id_e);
+				$insert['first']->bindValue(':id_materia', $id_m);
+				$insert['first']->bindValue(':id_ubicacion', $id_u);
+				$insert['first']->execute();
 
-			$insert['second']->bindValue(':id_elemento', $pdo->lastInsertId());
-			$insert['second']->bindValue(':id_estatus', $id_es);
-			$insert['second']->execute();
+				$insert['second']->bindValue(':id_elemento', $pdo->lastInsertId());
+				$insert['second']->bindValue(':id_estatus', $id_es);
+				$insert['second']->execute();
 			
 			/*$sql = "INSERT INTO elemento ( numero_serie, id_caracteristica, caracteristica_extra, id_tipo, id_materia, id_ubicacion) values(?,?,?,?,?,?)";		
 			$q = $pdo->prepare($sql);
@@ -87,7 +88,13 @@
 			$sql. = "INSERT INTO elemento_estatus ( id_elemento, id_estatus) values(?,?)";			
 			$q = $pdo->prepare($sql);
 			$q->execute(filter_var_array(array(mysql_insert_id(), $id_es), FILTER_SANITIZE_STRING)); */
-			$pdo->commit();
+				$pdo->commit();
+			}
+			catch (Exception $e){
+    		$pdo->rollback();
+    		throw $e; 
+    		}
+    		
 			Database::disconnect();
 			header("Location: index.php");
 		}
