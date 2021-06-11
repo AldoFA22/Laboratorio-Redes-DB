@@ -16,6 +16,7 @@
 						<a href="create.php" class="btn btn-warning">Agregar nuevo elemento</a>
 						<a href="caracteristicas/caracteristicas.php" class="btn btn-info">Lista de caracteristicas</a>
 						<a href="modelos_marcas.php" class="btn btn-info">Consultar modelos y marcas vigentes</a>
+						<a href="apartados/index.php" class="btn btn-info">Crear apartado</a>
 					</p>
 					
 					<table class="table table-striped table-bordered" class="table table-sm">
