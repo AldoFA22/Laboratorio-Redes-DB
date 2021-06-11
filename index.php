@@ -17,6 +17,7 @@
 						<a href="caracteristicas/caracteristicas.php" class="btn btn-info">Lista de caracteristicas</a>
 						<a href="modelos_marcas.php" class="btn btn-info">Consultar modelos y marcas vigentes</a>
 						<a href="apartados/index.php" class="btn btn-info">Lista de apartados</a>
+						<a href="historial_estatus.php" class="btn btn-primary">Historial de estatus</a>
 					</p>
 					
 					<table class="table table-striped table-bordered" class="table table-sm">

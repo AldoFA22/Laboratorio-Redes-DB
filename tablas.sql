@@ -1,3 +1,14 @@
+CREATE TABLE IF NOT EXISTS historial_estatus (
+   id_historial int NOT NULL AUTO_INCREMENT,
+   id_elemento int,
+   hora_cambio datetime,
+   id_estatus_old int,
+   nombre_estatus_old varchar(15),
+   id_estatus_new int,
+   nombre_estatus_new varchar(15),
+  PRIMARY KEY ( id_historial )
+) ENGINE=InnoDB;
+
 CREATE TABLE IF NOT EXISTS marca (
    id_marca int NOT NULL AUTO_INCREMENT,
    nombre_marca varchar(100) DEFAULT NULL,
