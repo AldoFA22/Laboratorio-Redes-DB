@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -35,19 +36,19 @@
 			              	<?php 
 						   	include '../Database_pg.php';
 							include '../database.php';
-						   	$pdo = new Database_pg;
-						   	$sql = 'SELECT * FROM apartados NATURAL JOIN usuarios;';
 
+							//Postgres
+						   	$pdo = new Database_pg;
+						   	$sql = 'SELECT * FROM apartados NATURAL JOIN usuarios ORDER BY apartados.id_apartado DESC;';
                             $query = $pdo->prepare($sql);
         			        $query->execute();
-        			        
-                    
         			        $apartados = $query->fetchAll(PDO::FETCH_OBJ);
 
+							//Se habre conexion de Mysql
                             $pdo_mysql = Database::connect();
 							$pdo_mysql->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		 				   	foreach ($apartados as $row) {
-											
+								//Consulta de informacion a Mysql con id que contiene postgres
 								$query = "SELECT * FROM elemento INNER JOIN caracteristica ON elemento.id_caracteristica = caracteristica.id_caracteristica WHERE id_elemento = ?";
 								$q = $pdo_mysql->prepare($query);
 								$q->execute(filter_var_array(array($row->id_herramienta),FILTER_SANITIZE_STRING));
@@ -71,6 +72,8 @@
 	    					   	echo '</td>';
 							  	echo '</tr>';
 						    }
+
+							//Cierre de Conexiones
 							Database::disconnect();	
                             $pdo->close();
 						  	?>
